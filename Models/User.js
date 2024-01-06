@@ -18,5 +18,5 @@ const userSchema = new mongoose.Schema({
   birth: { type: String, required: true },
 });
 
-module.exports = mongoose.model("Profile", profileSchema);
-module.exports = mongoose.model("User", userSchema);
+exports.Profile = mongoose.model("Profile", profileSchema);
+exports.User = mongoose.model("User", userSchema);

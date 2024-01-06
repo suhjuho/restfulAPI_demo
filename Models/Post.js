@@ -11,10 +11,11 @@ const commentSchema = new mongoose.Schema({
 const postSchema = new mongoose.Schema({
   postId: { type: mongoose.ObjectId },
   author: { type: Schema.Types.ObjectId, ref: "Profile", required: true },
+  content: { type: String, required: true },
   private: { type: Boolean, default: false },
   date: { type: Date, default: new Date(), auto: true },
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
 });
 
-module.exports = mongoose.model("Comment", commentSchema);
-module.exports = mongoose.model("Post", postSchema);
+exports.Comment = mongoose.model("Comment", commentSchema);
+exports.Post = mongoose.model("Post", postSchema);
