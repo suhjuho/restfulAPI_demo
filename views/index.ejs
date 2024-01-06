@@ -1,21 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= 메인페이지 %></title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
     <h1><%= title %></h1>
-    <% for( let index = 0; index < array.length; index++ ) { %>
-      <a href="/post/<%= 포스트아이디 %>">
-        <div class="post-box">
-          <p class="post-writer">작성자 : <%=  %></p>
-          <div class="post-content"><%=  %></div>
-          <p>좋아요</p>
-          <p>댓글</p>
-        </div>
-      </a>
-    <% } %>
-    <%- include("partials/footer") %>
+    <p>Welcome to <%= title %></p>
   </body>
 </html>
