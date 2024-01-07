@@ -9,6 +9,7 @@ router.get("/", async (req, res, next) => {
   const user = await User.findOne().populate("profiles");
   const profile = await Profile.findOne().populate("posts").exec();
   const posts = await Post.find().populate("author");
+
   res.render("index", { user, profile, posts });
 });
 

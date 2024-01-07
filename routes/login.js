@@ -26,8 +26,7 @@ router.get("/kakao", passport.authenticate("kakao"));
 router.get("/kakao/callback",
   passport.authenticate("kakao", { failureRedirect: "/login" }),
   (req, res) => {
-    console.log("카카오");
-    res.redirect("/index");
+    res.redirect("/");
   }
 )
 
