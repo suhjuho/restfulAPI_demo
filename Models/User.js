@@ -4,7 +4,6 @@ const { Schema } = mongoose;
 const profileSchema = new mongoose.Schema({
   profileId: { type: mongoose.ObjectId },
   nickname: { type: String, required: true, unique: true },
-  // 이 닉네임이 변경되면 (즉, update()하면) 아래 Posts, Comments의 닉네임도 변경이 되는지 여부
   posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
 });
