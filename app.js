@@ -1,7 +1,10 @@
 require("dotenv").config();
 const express = require("express");
+const passport = require("passport");
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const session = require("express-session");
 const cookieParser = require("cookie-parser");
-// const logger = require("morgan");
+// const { User, Profile } = require("./Models/User");
 const createError = require("http-errors");
 const path = require("path");
 
@@ -9,13 +12,65 @@ const index = require("./routes/index");
 const users = require("./routes/users");
 const login = require("./routes/login");
 
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_LOGIN_CALLBACK_URI,
+    },
+    async function (token, tokenSecret, profile, done) {
+      console.log(profile);
+      try {
+      const user = await User.findOne({ email: profile._json && profile._json.email });
+
+      if (!user) {
+        const newProfile = await Profile.create({
+          profileId: new mongoose.Types.ObjectId(),
+          nickname: profile.displayName,
+          posts: [],
+          comments: [],
+        });
+
+        const user = await User.create({
+          name: profile.displayName,
+          email: profile._json && profile._json.email,
+          password: profile.emails[0].value,
+          profiles: [newProfile.profileId],
+          birth: "0101",
+        });
+      }
+
+      done(null, user);
+    } catch (error) {
+      done(error);
+    }
+    }
+  )
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+const login = require("./routes/login");
+
 const app = express();
 
-// view engine setup
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-// app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -38,12 +93,10 @@ db.once("open", function () {
   console.log("MongoDB 연결 성공!");
 });
 
-// catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
 
-// error handler
 app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
