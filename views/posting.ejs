@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= 포스트 %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <div class="post-window">
+      <form method="POST">
+        <p>작성장 :<%= %></p>
+        <div>
+          <input type="checkbox" id="privite" name="privite" />
+          <label for="privite">비공개</label>
+        </div>
+        <textarea class="post-content" name="post-cotent">게시글</textarea>
+        <button type="submit">제출하기</button>
+      </form>
+    </div>
+    <%- include("partials/footer") %>
+  </body>
+</html>
