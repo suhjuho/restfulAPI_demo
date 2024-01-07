@@ -4,13 +4,13 @@ const passport = require("passport");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-// const { User, Profile } = require("./Models/User");
 const createError = require("http-errors");
 const path = require("path");
-
+const app = express();
 const index = require("./routes/index");
 const users = require("./routes/users");
 const login = require("./routes/login");
+const { User, Profile } = require("./Models/User");
 
 passport.use(
   new GoogleStrategy(
@@ -26,7 +26,6 @@ passport.use(
 
       if (!user) {
         const newProfile = await Profile.create({
-          profileId: new mongoose.Types.ObjectId(),
           nickname: profile.displayName,
           posts: [],
           comments: [],
@@ -36,8 +35,8 @@ passport.use(
           name: profile.displayName,
           email: profile._json && profile._json.email,
           password: profile.emails[0].value,
-          profiles: [newProfile.profileId],
-          birth: "0101",
+          profiles: [newProfile._id],
+          birth: "2000.01.01",
         });
       }
 
@@ -56,9 +55,6 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((user, done) => {
   done(null, user);
 });
-const login = require("./routes/login");
-
-const app = express();
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
