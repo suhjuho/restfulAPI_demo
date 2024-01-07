@@ -7,12 +7,18 @@
   <body>
     <h1>login</h1>
     <div>
-      <div>ID: <input type="text"></div>
-      <br>
-      <div>PW: <input type="password"></div>
-      <br>
+      <div>ID: <input type="text" /></div>
+      <br />
+      <div>PW: <input type="password" /></div>
+      <br />
+      <button ></button>
+      <a
+        href="http://localhost:3000/login/kakao/callback"
+        className="{style.kakao}"
+      >
+      카카오로 로그인
+      </a>;
       <button onclick="window.location.href='/login/'">로그인</button>
-      <button onclick="window.location.href='/login/'">카카오 계정으로 로그인</button>
       <button onclick="window.location.href='/login/'">구글로 로그인</button>
     </div>
   </body>
