@@ -5,35 +5,26 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1>Schema test</h1>
-    <p>testing schema ref, populate</p>
-    <form action="" method="post">
-      <input type="text" name="nickname" placeholder="enter nickname"/>
-      <button type="submit">change nickname</button>
-    </form>
+    <nav class="nav-bar">
+      <ul>
+        <li>home</li>
+        <li>search</li>
+        <a href="/users/<%= user._id %>">
+          <li>my Page</li>
+        </a>
+      </ul>
+    </nav>
     <section>
-      <h3>User Detail</h3>
-      <div>ID <%= user._id %></div>
-      <div>사용자 이름<%= user.name %></div>
-      <div>이메일 <%= user.email %></div>
-      <div>비밀번호 <%= user.password %></div>
-      <div>사용자 닉네임 <%= user.profiles[0].nickname %></div>
-    </section>
-    <section>
-      <h3>Profile Detail</h3>
-      <div>ID <%= profile._id %></div>
-      <div>닉네임 <%= profile.nickname %></div>
-      <p><%= profile.nickname %>가 작성한 모든 포스트들</p>
-      <% profile.posts.forEach(function(post, index) { %>
-        <div><%= index + 1 %>, <%= post.content %></div>
-      <% }); %>
-    </section>
-    <section>
-      <h3>작성된 모든 포스트들..</h3>
+      <form class="post-form" action="" method="post">
+        <div class="user_avatar"><%= user.name[0] %></div>
+        <input type="text" name="postContent" placeholder="What is happening?!"/>
+        <button type="submit">Post</button>
+      </form>
       <% posts.forEach(function(post, index) { %>
-        <h4>포스트 번호:<%= index + 1 %></h4>
-        <div>ID: <%= post._id %></div>
-        <div>내용<%= post.content %></div>
+        <article>
+          <div class="user_avatar"><%= post.author.nickname[0] %></div>
+          <content><%= post.content %></content>
+        </article>
       <% }); %>
     </section>
   </body>

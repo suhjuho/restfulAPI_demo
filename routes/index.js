@@ -1,33 +1,23 @@
 const express = require("express");
 const router = express.Router();
 
-const { User, Profile } = require("../Models/User");
+const { User } = require("../Models/User");
 const { Post } = require("../Models/Post");
 const { default: mongoose } = require("mongoose");
+const verifyLogin = require("./middleware/verifyLogin");
 
-router.get("/", async (req, res, next) => {
-  const user = await User.findOne().populate("profiles");
-  const profile = await Profile.findOne().populate("posts").exec();
+router.get("/", verifyLogin,  async (req, res, next) => {
   const posts = await Post.find().populate("author");
-
-  res.render("index", { user, profile, posts });
+  console.log(posts);
+  res.render("index", { user: req.user,  posts });
 });
 
 router.post("/", async (req, res, next) => {
-  const newProfile = await Profile.create({
-    profileId: new mongoose.Types.ObjectId(),
-    nickname: req.body.nickname,
-    posts: [],
+  console.log(req.user);
+  const newPost = await Post.create({
+    author: req.user.profiles[0],
+    content: req.body.postContent,
     comments: [],
-  });
-
-  const newUser = await User.create({
-    userId: new mongoose.Types.ObjectId(),
-    name: req.body.nickname,
-    email: req.body.nickname,
-    password: req.body.nickname,
-    profiles: [newProfile.profileId],
-    birth: req.body.nickname
   });
 
   res.redirect("/");

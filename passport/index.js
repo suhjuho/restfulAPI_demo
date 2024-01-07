@@ -10,8 +10,6 @@ passport.use(
       callbackURL: "http://localhost:3000/login/kakao/callback"
     },
     async (accessToken, refreshToken, profile, done) => {
-      console.log("kakao profile", profile);
-
       try {
         const existingUser = await User.findOne({
           email: profile._json
@@ -34,7 +32,6 @@ passport.use(
             password: profile.id,
             profiles: [newProfile._id],
             birth: "2000.01.01",
-            provider: "kakao",
           });
 
           done(null, newUser);

@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const passport = require("passport");
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const createError = require("http-errors");
@@ -10,51 +9,7 @@ const app = express();
 const index = require("./routes/index");
 const users = require("./routes/users");
 const login = require("./routes/login");
-const { User, Profile } = require("./Models/User");
-
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: process.env.GOOGLE_LOGIN_CALLBACK_URI,
-    },
-    async function (token, tokenSecret, profile, done) {
-      console.log(profile);
-      try {
-      const user = await User.findOne({ email: profile._json && profile._json.email });
-
-      if (!user) {
-        const newProfile = await Profile.create({
-          nickname: profile.displayName,
-          posts: [],
-          comments: [],
-        });
-
-        const user = await User.create({
-          name: profile.displayName,
-          email: profile._json && profile._json.email,
-          password: profile.emails[0].value,
-          profiles: [newProfile._id],
-          birth: "2000.01.01",
-        });
-      }
-
-      done(null, user);
-    } catch (error) {
-      done(error);
-    }
-    }
-  )
-);
-
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
+const signup = require("./routes/signup");
 
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -75,6 +30,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/", index);
 app.use("/users", users);
 app.use("/login", login);
+app.use("/signup", signup);
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const mongoose = require("mongoose");
