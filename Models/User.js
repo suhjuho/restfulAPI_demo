@@ -15,6 +15,7 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   profiles: [{ type: Schema.Types.ObjectId, ref: "Profile" }],
   birth: { type: String, required: true },
+  provider: { type: String, required: true },
 });
 
 exports.Profile = mongoose.model("Profile", profileSchema);
